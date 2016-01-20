@@ -1,0 +1,1 @@
+http://scikit-learn.org/stable/modules/linear_model.html#ordinary-least-squares
