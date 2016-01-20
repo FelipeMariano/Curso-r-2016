@@ -89,5 +89,54 @@ x <- c(13, 8, 5, 3, 2, 1, 1)
 x[x > 5] <- 0
 x
 
-#----------------------------- SUBSETTING
+#----------------------------- 
+
+#mtcars = banco de dados interno
+mtcars[,2]
+mtcars[[2]]
+mtcars$cyl #uso $ para pegar um elemento de uma lista, data frame = uma lista de listas
+mtcars[, 'cyl']
+
+#----------------------------- ESTATISTICAS BÁSICAS
+
+summary(mtcars)
+mean(mtcars$mpg) #Média de mpg
+median(mtcars$mpg) #Mediana de mpg
+var(mtcars$mpg) #Variãncia amostral
+sd(mtcars$mpg) #Desvio padrão
+quantile(mtcars$mpg, c(0.25,0.4)) #pegando os quartis
+quantile(mtcars$mpg, 0:10/10) #pegando os Decis
+
+# ESTUDAR: ?aggregate()
+
+data(diamonds, package='ggplot2') #base de dados do pacote ggplot2
+table(diamonds$cut) #retorna contagem da tabela
+table(diamonds$cut, diamonds$color) #retorna contagem da tabela, 1 vira linha e o outro coluna
+table(diamonds$cut, diamonds$color, diamonds$clarity) #retorna um array, para cada clarity, ele vai criar uma tabela com a cor e corte
+
+#prop.table()
+
+
+#----------------------------- OPERADOR PIPE
+
+library(magrittr)
+mean(mtcars$mpg)
+
+mtcars$mpg %>% mean()
+# joga o da esquerda dentro do da direita
+
+#esfrie(asse(coloque(bata(acrescente(recipiente(rep("farinha", 2), "água", "fermento", "leite", "óleo"), "farinha", até = "macio"), duração = "3min"), lugar = "forma", tipo = "grande", untada = T), duração = "50min"), "geladeira", "20min")
+
+# vira:
+
+#recipiente(rep("farinha", 2), "água", "fermento", "leite", "óleo") %>%
+#acrescente("farinha", até = "macio") %>%
+#bata(duração = "3min") %>%
+#coloque(lugar = "forma", tipo = "grande", untada = T) %>%
+#asse(duração = "50min") %>%
+#esfrie("geladeira", "20min")
+
+TRUE %>% mean(c(NA, 1:101), na.rm= .) #TRUE vai substituir o ponto!
+#É IGUAL:
+1:101 %>% c(NA) %>% mean(na.rm= TRUE)
 
