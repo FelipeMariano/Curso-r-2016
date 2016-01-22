@@ -87,3 +87,13 @@ pnud_muni %>%
   summarise(media = mean(idhm), dp = sd(idhm), n_municipios = n(), n_distinct(ufn)) 
 #numero de estados ufn calculado em n_distinct n mudou de 91 a 2010
 
+
+pnud_muni %>%
+  filter(ano == 2010) %>%  
+  count(ufn)
+
+
+#Exercício: expectativa de vida média ponderada pela população
+pnud_muni %>% filter(ano == 2000) %>%
+  group_by(ufn) %>% summarise(x = sum(espvida * popt)/sum(popt))
+  
