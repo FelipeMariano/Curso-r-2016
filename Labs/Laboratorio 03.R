@@ -26,3 +26,32 @@ flights <-flights %>% tbl_df
   flights %>% select(mes = month, atraso = dep_delay)
 
 #3------
+  flights %>% select(-tailnum, -origin, -dest)
+
+######MUTATE:
+#1------
+ flights %>% select(flight, dep_delay, arr_delay, distance, air_time) %>% mutate(ganho_de_tempo = (dep_delay - arr_delay), velocidade = (distance/air_time * 60))
+
+#2------
+  flights %>% select(flight, hour, minute, air_time) %>% mutate(hour2 = hour + (air_time%/%60), minute2 = air_time %% 60)
+
+######SUMMARISE:
+#1------
+  flights %>% summarise(media_dist = mean(distance))
+
+#2------
+  flights %>% group_by(month) %>% summarise(media = mean(distance))
+
+#3------
+  flights %>% group_by(month) %>% summarise(media = mean(air_time, na.rm = TRUE), mediana = median(air_time, na.rm = TRUE), quart1 = quantile(air_time, probs = c(0.25), na.rm = TRUE), quart3 = quantile(air_time, probs = c(0.25), na.rm = TRUE))
+  #ARRUMAR
+
+
+######ARRANGE:
+#1------
+  flights %>% arrange(dep_delay)
+
+
+#2------
+  flights %>% arrange(desc(dep_delay))
+
