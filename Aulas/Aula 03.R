@@ -96,4 +96,25 @@ pnud_muni %>%
 #Exercício: expectativa de vida média ponderada pela população
 pnud_muni %>% filter(ano == 2000) %>%
   group_by(ufn) %>% summarise(x = sum(espvida * popt)/sum(popt))
+
+
+#---------------------    TIDYR           ----------------------------------
+
+library(tidyr)
+
+#-------------------------SUMMARISE:
+#"Joga" uma variável nas colunas
+#espalhei a população pelos anos:
+pnud_muni %>%
+  group_by(ano, ufn) %>%
+  summarise(populacao=sum(popt)) %>%
+  ungroup() %>%
+  spread(ano, populacao) 
+
+#-------------------------GATHER:
+#Empliha o baco de dados
+pnud_muni %>%
+  filter(ano == 2010) %>%
+  select(ufn, municipio, starts_with('idhm_')) %>%
+  gather(tipo_idh, idh, starts_with('idhm_'))
   
