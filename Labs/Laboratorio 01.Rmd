@@ -5,18 +5,54 @@ date: "18 de janeiro de 2016"
 output: html_document
 ---
 
-```{r}
-  moeda <- function(p){
-    #runif(1) = Joga numero aleatório entre 0 e 1
-    x <- runif(1)
-    if (x < p){
-        1
-    }else{
-        0
-    }
-    
-  }
 
-moeda(0.1)
+```{r}
+######Lançamento 1 moeda:
+
+moeda <- function(p){
+  x <- runif(1)
+  if (x < p){
+      1
+  }else{
+      0
+  }
+}
+
+######Lançamento n moedas:
+
+moedas <- function(p, n = 1){
+  for (i in 1:n){
+    print(paste(i, ' - ', moeda(p)))
+  }
+}
+
+######pegando Proporção das moedas:
+ 
+proporcao <- function(p, n = 1){
+  valores <- numeric(length(n))  
+  prop = 0
+  for (i in 1:n){
+    valores[i] <- moeda(p)  
+  }
+  return(sum(valores / n))
+}
+
+######Fazendo a simulação, rodando n moedas, k vezes com probabilidade P:
+
+simulacao <- function(k, n, p){
+  proporcoes <- numeric(length(k))
+  for (i in 1:k){
+    proporcoes[i] <- proporcao(p, n)
+  }
+  print(proporcoes)
+}
+    
+valores <- simulacao(1000, 100, 0.1)
+    
+histograma <- function(numeros, xlab = "x", titulo = paste("Lançamento de moedas"), ...) {
+  hist(numeros, xlab = xlab, main = titulo, ...)
+}
+
+histograma(valores, breaks = 50, col = 3)
 ```
 
