@@ -1,9 +1,16 @@
 ---
 title: "Laboratório 01"
-author: "Curso R de verão 2016"
+author: "Curso R de verão 2016 - Felipe Mariano"
 date: "18 de janeiro de 2016"
 output: html_document
 ---
+
+---------------------
+
+#Exercícios
+
+
+
 
 
 ```{r}
@@ -35,6 +42,7 @@ proporcao <- function(p, n = 1){
     valores[i] <- moeda(p)  
   }
   return(sum(valores / n))
+  print(sum(valores / n))
 }
 
 ######Fazendo a simulação, rodando n moedas, k vezes com probabilidade P:
@@ -47,7 +55,8 @@ simulacao <- function(k, n, p){
   print(proporcoes)
 }
     
-valores <- simulacao(1000, 100, 0.1)
+valores <- simulacao(100, 100, 0.8)
+summary(valores)
     
 histograma <- function(numeros, xlab = "x", titulo = paste("Lançamento de moedas"), ...) {
   hist(numeros, xlab = xlab, main = titulo, ...)
