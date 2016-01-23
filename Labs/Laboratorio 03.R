@@ -5,7 +5,7 @@ library(nycflights13)
 
 library(dplyr)
 
-flights <-flights %>% tbl_df
+flights <- flights %>% tbl_df
 
 ######FILTER:
 #1------
@@ -54,4 +54,14 @@ flights <-flights %>% tbl_df
 
 #2------
   flights %>% arrange(desc(dep_delay))
+
+
+#############TIDYR
+library(tidyr)
+######SPREAD:
+  #1------
+    flights %>%  group_by(day)
+    summarise(med = mean(dep_delay, na.rm = TRUE)) %>%
+    spread(month, med)
+
 
