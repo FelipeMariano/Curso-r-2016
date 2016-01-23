@@ -1,13 +1,33 @@
-#Excel:
+## Exercícios Lab 03:
+## Felipe Mariano
 
-arq <- '_source/assets/dados/arq.txt'
-dados <- read.table(file = arq, sep = ";", dec = ",", header = T, 
-                    stringsAsFactors = F)
-str(dados)
-
+library(readr)
+library(readxl)
 library(dplyr)
-arq_diamonds <- '_source/assets/dados/diamonds.sqlite'
 
-dados_sqlite <- src_sqlite(arq_diamonds) %>% tbl("diamonds")
+##CSV:
+arq <- 'C:/Users/felipe/Desktop/R Programming/pnud2_win.csv'
+dt_pnud_csv <- read.table(file = arq, sep = ";", dec = ",", header = T, 
+                    stringsAsFactors = F)
+pnud_csv <- dt_pnud_csv[,c(1:10)]
+summary(pnud_csv)
 
-dados_sqlite
+
+##XLSX:
+arq <- 'C:/Users/felipe/Desktop/R Programming/pnud_win.xlsx'
+dt_pnud_xlsx <- read_excel(arq, col_names = TRUE, na = "")
+pnud_xlsx <- dt_pnud_xlsx[,c(1:10)]
+summary(pnud_xlsx)
+
+
+##TXT:
+arq <- 'C:/Users/felipe/Desktop/R Programming/pnud_win.txt'
+dt_pnud_txt <- read.table(file = arq, sep = " ", dec = ".", header = T, 
+                           stringsAsFactors = F)
+pnud_txt <- dt_pnud_txt[,c(1:10)]
+summary(pnud_txt)
+
+##SQLITE:
+
+
+
