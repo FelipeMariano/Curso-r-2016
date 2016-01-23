@@ -1,8 +1,10 @@
-##Lab 03:
+## Exercícios Lab 03:
+## Felipe Mariano
 
-library(nycflights13)
 #install.packages('nycflights13')
-
+library(nycflights13)
+library(tidyr)
+library(magrittr)
 library(dplyr)
 
 flights <- flights %>% tbl_df
@@ -56,12 +58,26 @@ flights <- flights %>% tbl_df
   flights %>% arrange(desc(dep_delay))
 
 
-#############TIDYR
-library(tidyr)
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~TIDYR
+
+
 ######SPREAD:
-  #1------
-    flights %>%  group_by(day)
-    summarise(med = mean(dep_delay, na.rm = TRUE)) %>%
-    spread(month, med)
+#1------
+  flights %>% select(day, month, dep_delay) %>%
+  group_by(day, month) %>% summarise(med = mean(dep_delay, na.rm=TRUE)) %>%
+  spread(month, med)
+
+
+#2------
+  flights %>% select(hour, day, dep_delay) %>%
+  group_by(hour, day) %>% summarise(med = mean(dep_delay, na.rm=TRUE)) %>%
+  spread(day, med)
+
+######GATHER:
+#1------
+  flights %>% select(day, month, dep_delay) %>%
+  group_by(day, month) %>% summarise(med = mean(dep_delay, na.rm=TRUE)) %>%
+  spread(month, med) %>% gather(day)
+
 
 
