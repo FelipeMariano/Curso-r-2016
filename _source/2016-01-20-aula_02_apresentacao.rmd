@@ -1,0 +1,439 @@
+---
+title: "Aula 02 - Estruturas de dados e vocabulário"
+author: "Curso de R: Do casual ao avançado"
+date: "21 de janeiro de 2015"
+layout: post
+tags: slides
+category: slides
+output: 
+  ioslides_presentation:
+    mathjax: "//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+    keep_md: false
+    self_contained: true
+---
+
+```{r, echo=FALSE}
+library(pander)
+panderOptions("table.style", "rmarkdown")
+```
+
+## Estruturas de dados no R
+
+Tipos básicos de estrutura no R:
+
+- **Atomic vector**: homogêneo e unidimensional
+- **Matriz**: homogêneo e bidimensional
+- **Array**: homogêneo e multidimensional
+- **Lista**: heterogêneo 
+- **Data frame**: heterogêneo 
+
+**Note que**: atomic vectors e matrizes são também arrays e data frames são listas.
+
+## Atomic Vectors
+
+Estrutura de objetos mais simples do R, caracterizados por "não ter dimensão"
+
+Tipos de atomic vectos:
+
+- lógico
+- integer
+- double
+- complexo
+- character
+
+## Atomic Vectors 
+
+Exemplos:
+
+```{r}
+var1 <- c(1, 2.5, 4.5)
+var2 <- c(1L, 6L, 10L)
+var3 <- c(TRUE, FALSE, T, F)
+var4 <- c("essas são", "algumas strings")
+```
+
+**Curiosidade**: na função `c()`, o *c* é de *concatenate*.
+
+## Atomic Vectors
+
+Para saber qual é o tipo de um objeto, utilizamos a função `typeof()`.
+
+```{r tipos}
+typeof(var1)
+typeof(var2)
+```
+
+## Atomic Vectors
+
+Para saber qual é o tipo de um objeto, utilizamos a função `typeof()`.
+
+```{r}
+typeof(var3)
+typeof(var4)
+```
+
+## Atomic Vectors {.build}
+
+Funções `is.xxx()`.
+
+```{r}
+is.integer(var1)
+is.double(var1)
+is.numeric(var1)
+```
+
+## Atomic Vectors {.build}
+
+```{r}
+is.logical(var3)
+is.character(var4)
+```
+
+## Coerção
+
+O R converterá o objeto para o tipo mais flexível, na ordem:
+
+- logical
+- integer
+- double
+- character
+
+## Coerção {.build}
+
+```{r}
+c("a", 1, TRUE, T)
+c(T, 1, F)
+```
+
+Utilidade:
+
+```{r}
+sum(c(T, F, T, F, T))
+```
+
+## Factors
+
+*Factors*: dados categorizados.
+
+- contêm apenas valores pré-definidos, chamados *levels*; e
+- são internamente vetores de inteiros.
+
+```{r}
+f <- factor(c("aventura", "terror", "comédia", "drama"))
+f
+levels(f)
+```
+
+Dentro do objeto, os *levels*: ordem alfabética.
+
+## Factors {.build}
+
+Cuidado ao converter factors em objetos numéricos:
+
+```{r}
+f <- factor(c("2", "3", "1", "10"))
+as.numeric(f)
+as.numeric(as.character(f))
+```
+
+## Matrizes e Arrays
+
+Funções `matrix()` e `array()`.
+
+```{r}
+vet <- c(1, 2, 3)
+
+# Dois argumentos para determinar o número de linahs e colunas
+mat <- matrix(1:6, ncol = 3, nrow = 2)
+
+# Um vetor para descrever todas as dimensões
+arr <- array(1:12, dim = c(3, 2, 2))
+```
+
+## Dimensões e comprimentos
+
+As funções `length()`, `dim()`, `nrow()`, `ncol()` são usadas para determinar o comprimento de cada dimensão de um objeto.
+
+## Dimensões e comprimentos {.build}
+
+```{r}
+dim(vet)
+nrow(vet)
+ncol(vet)
+length(vet)
+```
+
+## Dimensões e comprimentos {.build}
+
+```{r}
+dim(mat)
+length(mat)
+nrow(mat)
+ncol(mat)
+```
+
+## Dimensões e comprimentos {.build}
+
+```{r}
+dim(arr)
+length(arr)
+nrow(arr)
+ncol(arr)
+```
+
+## Listas e Data frames
+
+Função `list()`.
+
+```{r, eval = F}
+lista <- list(
+  c(1:5),
+  c("homem", "mulher"),
+  c(T, F, T),
+  list(c(1,2,3), c("a", "b", "c"))
+)
+lista
+```
+
+## Listas e Data frames
+
+- **Data frames**: listas com todos os elementos de mesmo comprimento. 
+- Definidos usando a função `data.frame()`.
+
+```{r}
+df <- data.frame(x = 1:4, y = c("oi", "oi", "oi", "oi"), z = T)
+df
+```
+
+## Diferença entre data.frame e matrix
+
+Qual é a diferença entre `data.frame` e `matrix`?
+
+No `data.frame` do slide anterior, a variável `z` só foi definida para a primeira linha?
+
+## data.frames e factors
+
+```{r}
+df <- data.frame(x = 1:4, y = c("oi", "oi", "oi", "oi"), z = T)
+str(df)
+```
+
+```{r}
+df <- data.frame(x = 1:4, y = c("oi", "oi", "oi", "oi"), z = T, 
+                 stringsAsFactors = F)
+str(df)
+```
+
+## data.frames {.build}
+
+`names()`: nome das colunas do data frame (ou dos elementos da lista). 
+
+```{r}
+names(df)
+names(df) <- c("a", "b", "c")
+names(df)
+```
+
+## Combinando data.frames
+
+Funções `rbind()` e `cbind()`:
+
+```{r}
+df1 <- data.frame(x = 3:4, y = c("s", "s"), z = T)
+df2 <- data.frame(x = 1:2, y = c("n", "n"), z = F)
+```
+
+## Combinando data.frames {.build}
+
+```{r}
+rbind(df1, df2)
+cbind(df1, df2)
+```
+
+**Nota**: Também funcionam com matrizes.
+
+## Subsetting {.build}
+
+*subsetting*: seleção de um subconjunto de um objeto.
+
+- Números inteiros positivos
+- Números inteiros negativos
+- Vetores lógicos
+
+## Números inteiros positivos {.build}
+
+```{r}
+x <- c(13, 8, 5, 3, 2, 1, 1) 
+x[c(1, 2, 3)]
+order(x)
+x[order(x)]
+```
+
+## Números inteiros negativos {.build}
+
+```{r}
+x[-c(2, 5, 6)]
+```
+
+## Vetores lógicos {.build}
+
+```{r}
+x == 1
+x[x == 1]
+
+x > 5
+x[x > 5]
+```
+
+## Outras dimensões {.build}
+
+```{r}
+m <- matrix(c(1:5, 11:15), nrow = 5, ncol = 2)
+m
+```
+
+## Outras dimensões {.build}
+
+```{r}
+m[5, 2] # Retorna o elemento especificado pelos índices.
+m[, 1] # Retorna todos os elementos da coluna 1.
+m[3, ] # Retorna todos os elementos da linha 3.
+m[m %% 2 == 0] # Retorna os elementos pares.
+```
+
+## Alterando valores usando subsetting {.build}
+
+```{r}
+x <- c(13, 8, 5, 3, 2, 1, 1) 
+x[x > 5] <- 0
+x
+```
+
+## Estatísticas básicas
+
+Vá para o R!
+
+## Operador pipe %>%
+
+O logo do nosso curso!
+o operador `%>%` usa o resultado do seu lado esquerdo como primeiro argumento da função do lado direito. "Só" isso!
+Para usar o operador `%>%`, primeiramente devemos instalar o pacote `magrittr` com a função `install.packages()`
+
+```{r, , eval=FALSE}
+install.packages("magrittr")
+```
+
+e carregá-lo com a função `library()`
+
+```{r}
+library(magrittr)
+```
+
+## Uso do %>%  {.build}
+
+```{r}
+x <- c(1, 2, 3, 4)
+x %>% sum %>% sqrt # ou x %>% sum() %>% sqrt()
+sqrt(sum(x))
+```
+
+## Por quê o pipe é legal?
+
+```{r, eval=FALSE}
+esfrie(asse(coloque(bata(acrescente(recipiente(
+  rep("farinha", 2), "água", "fermento", "leite", "óleo"), 
+  "farinha", até = "macio"), duração = "3min"), 
+  lugar = "forma", tipo = "grande", 
+  untada = T), duração = "50min"), "geladeira", "20min")
+```
+
+## Legibilidade!
+
+```{r, eval = F}
+recipiente(rep("farinha", 2), "água", "fermento", "leite", "óleo") %>%
+  acrescente("farinha", até = "macio") %>%
+  bata(duração = "3min") %>%
+  coloque(lugar = "forma", tipo = "grande", untada = T) %>%
+  asse(duração = "50min") %>%
+  esfrie("geladeira", "20min")
+```
+
+- Mais rápido de escrever
+- Mais fácil de ler
+
+## Uso do `%>%` com `.`
+
+```{r}
+TRUE %>% mean(c(NA, 1:101), na.rm = .)
+FALSE %>% mean(c(NA, 1:101), na.rm = .)
+```
+
+## Exercício {.build}
+
+- Reproduza o código `TRUE %>% mean(c(NA, 1:101), na.rm = .)`,
+começando com `1:101`.
+
+```{r}
+1:101 %>% 
+  c(NA) %>% 
+  mean(na.rm = TRUE)
+```
+
+## Gráficos simples
+
+```{r}
+x <- seq(1, 10, 0.1)
+y <- exp(-x)
+
+plot(x, y)
+```
+
+## plyr
+
+principais vantagens: 
+
+- Esconde loops tornando o código mais legível e menos repetitivo.
+- Incentiva a alocação prévia do objeto que será retornado, o que torna o código mais eficiente.
+- Dependendo dos parãmetros escolhidos, tenta fazer o código tão eficiente quanto as funções `sapply`, `lapply`, `apply` do pacote `base`.
+- Permite acompanhar a execução do código.
+- Permitir paralelização, usando o pacote `foreach`.
+
+```{r}
+library(plyr)
+```
+
+## plyr
+
+```{r}
+mat <- matrix(rnorm(300), ncol = 3)
+m <- numeric(length = ncol(mat))
+for (i in 1:ncol(mat)){
+  m[i] <- mean(mat[,i])
+}
+m
+```
+
+```{r}
+aaply(mat, 2, mean)
+```
+
+## plyr
+
+```{r}
+df <- data.frame(x = sample(1:4, size = 100, replace = T), y = rnorm(100))
+
+m <- numeric(length = length(unique(df$x)))
+for(i in unique(df$x)){
+  m[i] <- mean(df$y[df$x == i])
+}
+m
+```
+
+```{r}
+library(magrittr)
+daply(df, .(x), colwise(mean)) %>% as.numeric()
+```
+
+---
+
+<img src="figure/tabela_funcoes_plyr.png" style="width:600px; margin-top:100px"></img>

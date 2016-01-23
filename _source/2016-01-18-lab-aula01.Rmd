@@ -1,0 +1,61 @@
+---
+title: "Aula 01 - Laboratório"
+date : 2016-01-18
+layout: post
+comments: true
+tags: lab
+category: lab
+---
+
+## Objetivo
+
+O objetivo deste exercício é a compreensão das estruturas mais simples de dados em R e a realização de pequenos programas que interagem com essas estruturas. Além disso apresentamos os relatórios em RMarkdown que possuem as seguintes vantagens:
+
+- Utilização da linguagem de marcação _markdown_.
+- Possibilidade de incluir código R nos arquivos.
+- Roda com o pacote `knitr` e o programa `pandoc`.
+- Possibilidade de criar relatórios em html, docx, pdf, latex, entre outros.
+- Possibilidade de criar apresentações e relatórios com gráficos dinãmicos.
+- Possibilidade de inserir sintaxe matemática, como \(e^{i\pi}=-1\), nos documentos.
+- Documentos interativos com o `shiny`.
+
+Abaixo seguem alguns links podem ajudar na utilização do RMarkdown:
+
+- Mais fácil com RStudio.
+- Conceitos básicos de Markdown [nesse link](http://daringfireball.net/projects/markdown/).
+- RMarkdown com exemplos [nesse link](http://rmarkdown.rstudio.com/).
+- Sobre os metadados em YAML [nesse link](http://rmarkdown.rstudio.com/html_document_format.html).
+
+**Exemplo:** [código que gerou a aula 01](https://github.com/curso-r/curso-r.github.com/blob/master/posts/aula01.Rmd).
+
+## Exercício do Laboratório
+
+O exercício consiste em criar um relatório apresentando uma simulação do [teorema central do limite](https://pt.wikipedia.org/wiki/Teorema_central_do_limite) usando o R.
+
+Como se trata de um exercício de programação, o relatório deverá conter:
+
+1. Uma função em R, chamada `moeda` com o parâmetro `p` a probabilidade de ser cara. A função deve retornar 1 se o resultado do lançamento for cara e 0 caso contrário.
+
+2. Uma função chamada `moedas` com os parâmetros `n` e `p` que simula o lançamento de `n` moedas com probabilidade `p` de serem cara e retorna um vetor de 0's e 1's com os resultados obtidos em cada um dos lançamentos.
+
+3. Uma função chamada `proporcao` com parâmetro `resultados` (que é um vetor de 0's e 1's) e retorna a proporção de 1's neste vetor.
+
+4. Uma função chamada `simulacao` que tem os parâmetro `k`, `n` e `p`. Essa função deverá repetir o seguinte processo `k` vezes:
+* simular o lançamento de `n` moedas com probabilidade `p` de ser cara.
+* calcular a proporção de caras (1's) obtidos nesses `n` lançamentos.
+* salvar a proporção calculada em um elemento do vetor.
+A função deve retornar um vetor com todas as proporções obtidas. 
+
+*Importante:* As funções devem utilizar as funções criadas anteriormente. Exemplo, a função `moeda` pode ser utilizada dentro da função `moedas`.
+
+Em seguida o relatório deve apresentar histogramas das simulações realizadas para diversas combinações dos parâmetros `n` e `p`. Com esses histogramas deve ser possível observar que conforme aumentamos `n` a distribuição se aproxima mais da distribuição Normal.
+ 
+## Relatório
+
+Como parte do exercício, o relatório deeverá ser entregue por meio de um repositório no [Github](https://github.com/), portanto:
+
+* Crie uma conta no [Github](https://github.com/), se você ainda não possui.
+* Crie um repositório com o nome `curso-r-2016`.
+* Dentro desse repositório crie uma pasta com o nome lab1.
+
+O arquivo deve estar dentro da pasta lab1 e se chamar `lab1.Rmd`.

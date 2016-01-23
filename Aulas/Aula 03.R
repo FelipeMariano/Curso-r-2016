@@ -102,7 +102,7 @@ pnud_muni %>% filter(ano == 2000) %>%
 
 library(tidyr)
 
-#-------------------------SUMMARISE:
+#-------------------------SPREAD:
 #"Joga" uma variável nas colunas
 #espalhei a população pelos anos:
 pnud_muni %>%
