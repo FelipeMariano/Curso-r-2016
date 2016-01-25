@@ -14,6 +14,13 @@ output: html_document
 
 
 ```{r}
+    
+histograma <- function(numeros, xlab = "proporção", titulo = paste("Lançamento de moedas"), ...) {
+  hist(numeros, ylab = xlab, main = titulo, ...)
+}
+
+
+
 ######Lançamento 1 moeda:
 
 moeda <- function(p){
@@ -54,14 +61,11 @@ simulacao <- function(k, n, p){
   }
   print(proporcoes)
 }
-    
-valores <- simulacao(100, 100, 0.8)
-summary(valores)
-    
-histograma <- function(numeros, xlab = "x", titulo = paste("Lançamento de moedas"), ...) {
-  hist(numeros, xlab = xlab, main = titulo, ...)
-}
 
+valores <- simulacao(10, 100, 0.5)
+summary(valores)
 histograma(valores, breaks = 50, col = 3)
+
+
 ```
 
