@@ -28,6 +28,21 @@ pnud_txt <- dt_pnud_txt[,c(1:10)]
 summary(pnud_txt)
 
 ##SQLITE:
+arq <- 'C:/Users/felipe/Desktop/R Programming/pnud.sqlite'
+dt_pnud_sqlite <- src_sqlite(arq) %>% tbl("pnud")
+
+
+pnud_sqlite
+
+
+
+########################PARTE 2:
+library(readr)
+link_pnud <- 'C:/Users/felipe/Desktop/R Programming/pnud_simplificado.rds'
+pnud_simp <- readRDS(tmp, refhook = NULL)
+pnud_simp
+
+
 
 
 

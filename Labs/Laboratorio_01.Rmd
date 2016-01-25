@@ -62,7 +62,7 @@ simulacao <- function(k, n, p){
   print(proporcoes)
 }
 
-valores <- simulacao(500, 10000, 0.5)
+valores <- simulacao(1000, 10000, 0.5)
 summary(valores)
 histograma(valores, breaks = 50, col = 3 )
 
