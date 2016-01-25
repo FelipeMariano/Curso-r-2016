@@ -38,11 +38,10 @@ pnud_sqlite
 
 ########################PARTE 2:
 library(readr)
+library(httr)
 link_pnud <- 'C:/Users/felipe/Desktop/R Programming/pnud_simplificado.rds'
-pnud_simp <- readRDS(tmp, refhook = NULL)
-pnud_simp
-
-
+pnud <- readRDS(tmp)
+pnud
 
 
 

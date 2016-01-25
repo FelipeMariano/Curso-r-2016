@@ -16,7 +16,7 @@ output: html_document
 ```{r}
     
 histograma <- function(numeros, xlab = "proporção", titulo = paste("Lançamento de moedas"), ...) {
-  hist(numeros, ylab = xlab, main = titulo)
+  hist(numeros, xlab = xlab, main = titulo)
 }
 
 
@@ -49,7 +49,6 @@ proporcao <- function(p, n = 1){
     valores[i] <- moeda(p)  
   }
   return(sum(valores / n))
-  print(sum(valores / n))
 }
 
 ######Fazendo a simulação, rodando n moedas, k vezes com probabilidade P:
@@ -59,10 +58,10 @@ simulacao <- function(k, n, p){
   for (i in 1:k){
     proporcoes[i] <- proporcao(p, n)
   }
-  print(proporcoes)
+  return(proporcoes)
 }
 
-valores <- simulacao(500, 10000, 0.5)
+valores <- simulacao(300, 50, 0.5)
 summary(valores)
 histograma(valores, breaks = 50, col = 3 )
 
