@@ -92,3 +92,5 @@ flights %>% filter(dep_delay > 0) %>%
   summarise(atraso_med = mean(dep_delay + arr_delay, na.rm = TRUE)) %>% 
   filter(atraso_med > 60) %>% 
   arrange(desc(atraso_med)) %>% head(10)
+
+
