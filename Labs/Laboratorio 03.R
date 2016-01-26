@@ -80,4 +80,15 @@ flights <- flights %>% tbl_df
   spread(month, med) %>% gather(day)
 
 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~DESAFIOS
+n <- nrow(flights)
+flights %>% filter(dep_delay > 0) %>% 
+  group_by(flight) %>% 
+  summarise(med = mean(dep_delay + arr_delay, na.rm = TRUE), td = med + qt(0.975, df = n - 1) * sqrt(var(dep_delay + arr_delay, na.rm = TRUE) / n))
 
+
+flights %>% filter(dep_delay > 0) %>% 
+  group_by(dest) %>% 
+  summarise(atraso_med = mean(dep_delay + arr_delay, na.rm = TRUE)) %>% 
+  filter(atraso_med > 60) %>% 
+  arrange(desc(atraso_med)) %>% head(10)
