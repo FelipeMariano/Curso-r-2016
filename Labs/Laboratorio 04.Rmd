@@ -1,0 +1,34 @@
+---
+title: "Laboratorio 04"
+output: html_document
+---
+
+
+##geom_point
+
+
+
+###1. Quais são os aspectos estéticos (aesthetics) exigidos (obrigatórios) da função geom_point()?
+
+####Resposta: 
+            Os aspectos estéticos, ou seja, variáveis do gráfico.
+
+
+
+###2. Faça um gráfico de dispersão do preço (price) pela variável quilates (carat). Utilize as funções xlab() e ylab() para trocar os labels dos eixos x e y, respectivamente.
+
+```{r}
+library(ggplot2)
+
+
+  graph <- 
+ggplot(diamonds) +
+  geom_point(aes(x = carat, y = price))
+
+graphFinal <- 
+graph + xlab("Quilates") + 
+ ylab("Preço")
+
+graphFinal
+```
+
