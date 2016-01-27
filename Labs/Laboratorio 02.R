@@ -43,14 +43,21 @@ summary(pnud_rds)
 
 #~~ ~~~~~~ ~~~~ ~~~~~~
 ##SQLITE:
-arq <- 'C:/Users/felipe/Desktop/R Programming/pnud.sqlite'
+arq <- 'C:/Users/adm/Downloads/pnud.sqlite'
+dados_pnud <- src_sqlite(arq) %>% 
+  tbl("pnud")
 
+pnud_sqlite <- data.frame(dados_pnud)
 
+summary(pnud_sqlite[,c(1:10)])
 
 ########################PARTE 2:
 
-link_pnud <- 'C:/Users/felipe/Desktop/R Programming/pnud.rds'
-pnud <- readRDS(link_pnud)
+link_pnud <- 'https://www.dropbox.com/s/seqctcl46qeemgu/pnud_simplificado.rds?dl=1'
+tmp <- tempfile()
+httr::GET(link_pnud, httr::write_disk(tmp))
+pnud <- readRDS(tmp)
+file.remove(tmp)
 
 #Quais são os seis municípios com os maiores IDH municipais em 2010.
 pnud %>% select(ano, ufn, idhm) %>% 
@@ -59,9 +66,9 @@ pnud %>% select(ano, ufn, idhm) %>%
   head(6)
 
 #Qual é a unidade federativa com menor expectativa de vida média, ponderada pela população dos municípios em 2000.
-pnud %>% select(ano, espvida, ufn, popt) %>%  
+pnud %>% select(ano, espvida, ufn, pesotot) %>%  
   filter(ano == 2010) %>% group_by(ufn) %>%
-  summarise(espvida_med = sum(espvida * popt)/sum(popt)) %>% 
+  summarise(espvida_med = sum(espvida * pesotot)/sum(pesotot)) %>% 
   arrange(espvida_med) %>% head(1)
 
 #Quais são os municípios outliers com relação ao índice de Gini em 1991 e em 2010 
