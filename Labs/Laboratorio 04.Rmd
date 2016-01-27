@@ -7,28 +7,93 @@ output: html_document
 ##geom_point
 
 
+####1. Quais são os aspectos estéticos (aesthetics) exigidos (obrigatórios) da função geom_point()?
 
-###1. Quais são os aspectos estéticos (aesthetics) exigidos (obrigatórios) da função geom_point()?
-
-####Resposta: 
-            Os aspectos estéticos, ou seja, variáveis do gráfico.
-
+#####Resposta: 
+            As variáveis X e Y.
 
 
-###2. Faça um gráfico de dispersão do preço (price) pela variável quilates (carat). Utilize as funções xlab() e ylab() para trocar os labels dos eixos x e y, respectivamente.
+####2. Faça um gráfico de dispersão do preço (price) pela variável quilates (carat). Utilize as funções xlab() e ylab() para trocar os labels dos eixos x e y, respectivamente.
 
 ```{r}
 library(ggplot2)
-
 
   graph <- 
 ggplot(diamonds) +
   geom_point(aes(x = carat, y = price))
 
-graphFinal <- 
-graph + xlab("Quilates") + 
- ylab("Preço")
+graphExe1 <- 
+  graph + xlab("Quilates") + 
+  ylab("Preço")
 
-graphFinal
+graphExe1
 ```
 
+
+
+####3. Utilize a facets para fazer gráficos de dispersão do preço pela variável quilate (o mesmo gráfico do exercício 1) para cada nível da variável claridade (clarity).
+
+```{r}
+  graph <- 
+ggplot(diamonds) +
+  geom_point(aes(x = carat, y = price))
+
+graph <- 
+ggplot(diamonds) +
+  geom_point(aes(x = carat, y = price))
+
+graphExe2 <- 
+  graph + xlab("Quilates") + 
+  ylab("Preço") + facet_grid(~clarity)
+
+graphExe2
+```
+
+
+##geom_histogram
+
+
+####4. Quais são os aspectos estéticos (aesthetics) exigidos (obrigatórios) da função geom_histogram()?
+#####Resposta: 
+            A variável X.
+            
+
+####5. Faça um histograma da variável preço. Modifique a cor das barras de forma que elas não pareçam grudadas umas nas outras.
+            
+```{r}
+graphHist <- 
+ggplot(data = diamonds, aes(x = price, y = ..density..)) +
+  geom_histogram(color = 'black', fill = 'light grey')
+graphHist
+```
+
+
+####6. Utilize a função geom_density() para adicionar ao gráfico anterior uma estimativa suavizada da densidade.
+```{r}
+graphHist +
+  geom_density(alpha = 0.6, color = "Blue")
+```
+
+
+##geom_boxplot
+
+
+####7. Quais são os aspectos estéticos (aesthetics) exigidos (obrigatórios) da função geom_boxplot()?
+#####Resposta: 
+            Os aspectos: lower, middlle, upper, x, ymax, ymin
+            
+
+####8. Faça boxplots da variável preço coloridos de acordo com a variável corte (cut).
+```{r}
+graphHist <- 
+ggplot(data = diamonds) +
+  geom_boxplot(aes(y = price, x = color, fill = cut))
+graphHist
+```
+
+
+####9. Substitua as cores padrões e remova a legenda do gráfico anterior. (Dica: use a função scale_color_manual)
+```{r}
+graphHist +
+  scale_color_manual(values = c("grey", "light blue"))
+```
