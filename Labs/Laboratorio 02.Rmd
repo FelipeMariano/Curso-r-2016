@@ -127,7 +127,6 @@ ne <- c('Alagoas', 'Bahia', 'Ceará', 'Maranhão', 'Paraíba', 'Pernambuco', 'Pi
 n <- c('Acre', 'Amapá', 'Amazonas', 'Pará', 'Rondônia', 'Roraina', 'Tocantins')
 s <- c('Paraná', 'Santa Catarina', 'Rio Grande do Sul')
 co <- c('Distrito Federal', 'Goiás', 'Mato Grosso', 'Mato Grosso do Sul')
-
 val1 <- 
 pnud %>% filter(ufn %in% se) %>% group_by(ano) %>% summarise(x = mean(rdpc)) %>% summarise(media = mean(x))
 val2 <- 
@@ -145,30 +144,45 @@ if (val1 > val2){
 
 ####Associação entre Escolariedade, renda per capita e espectativa de vida.
 ```{r}
-pnud %>% select(ano, ufn, i_escolaridade, rdpc, espvida) %>% group_by(ufn) %>% summarise(escolariedade_med = mean(i_escolaridade), renda_perc_med = mean(rdpc), espec_vida_med = mean(espvida)) %>% arrange(desc(escolariedade_med))
+pnud %>% select(ano, ufn, idhm, rdpc, espvida) %>% group_by(ufn) %>% summarise(idhm_med = mean(idhm), renda_perc_med = mean(rdpc), espec_vida_med = mean(espvida)) %>% arrange(desc(idhm_med))
 ```
 
 
 
-####Valores anteriores no gráfico (3 primeiras cidades)
+####Valores anteriores no gráfico (3 primeiros estados):
 ```{r}
-cidades <- c('Distrito Federal', 'Rio de Janeiro', 'São Paulo')
+estados <- c('Distrito Federal', 'Rio de Janeiro', 'São Paulo')
 
 valores <- 
-pnud %>% select(ano, ufn, i_escolaridade, rdpc, espvida) %>% 
-  mutate(i_escolaridade = ((i_escolaridade - min(i_escolaridade))/(max(i_escolaridade) - min(i_escolaridade))),
+pnud %>% select(ano, ufn, idhm, rdpc, espvida) %>% 
+  mutate(idhm = ((idhm - min(idhm))/(max(idhm) - min(idhm))),
          rdpc = ((rdpc - min(rdpc))/(max(rdpc) - min(rdpc))),
          espvida = ((espvida - min(espvida))/(max(espvida) - min(espvida)))
          ) %>%
-  gather(valores = c(i_escolaridade, rdpc, espvida)) %>%
-  filter(ufn %in% cidades) %>% group_by(key, ano, ufn) %>%
+  gather(valores = c(idhm, rdpc, espvida)) %>%
+  filter(ufn %in% estados) %>% group_by(key, ano, ufn) %>%
   summarise(valor = mean(value)) 
 
 ggplot(valores, aes(ano, valor, color = key)) + geom_line() +
   facet_wrap(~ufn) +
   scale_color_manual("Índice", values = c("dark grey", "sky blue", "red"),
-                     labels = c("Espectativa de vida", "Escolariedade", "Renda per capita")
+                     labels = c("Espectativa de vida", "IDHM", "Renda per capita")
                      ) +
-  labs(x = "Valores", y = "Ano")
+  labs(x = "Ano", y = "Valores")
+
+```
+
+
+
+####Renda per capita de São Paulo:
+```{r results='hide', message=FALSE, warning=FALSE}
+
+valores <- 
+pnud %>% select(ano, ufn, rdpc, municipio) %>% 
+  filter(ufn %in% 'São Paulo') %>% group_by(ano, municipio) %>%
+  summarise(valor = mean(rdpc)) %>% arrange(desc(valor))
+
+ggplot(valores) + 
+  geom_histogram(aes(x = valor, y = ..density..), color = 'light grey', fill = 'dark grey')
 
 ```
