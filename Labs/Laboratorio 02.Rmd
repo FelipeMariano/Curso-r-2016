@@ -1,0 +1,174 @@
+---
+title: "Laboratorio 02"
+author: "Curso R de verão 2016 - Felipe Mariano"
+date: "28 de janeiro de 2016"
+output: html_document
+---
+
+###Exercícios
+
+#####Leia de alguma forma adequada todos os arquivos dentro da pasta “dados” obtida neste link, guardando os dados em objetos com nomes pnud_xxx, sendo xxx o nome da extensão do arquivo. Para cada arquivo lido, rode o summary() das 10 primeiras colunas para verificar que os dados foram obtidos corretamente.
+
+
+```{r include=FALSE, cache=FALSE}
+library(httr)
+library(graphics)
+library(readr)
+library(readxl)
+library(dplyr)
+library(httr)
+library(xml2)
+library(rvest)
+library(ggplot2)
+library(tidyr)
+```
+
+####->CSV:
+```{r}
+arq <- 'C:/Users/felipe/Desktop/R Programming/pnud2_win.csv'
+dt_pnud_csv <- read.table(file = arq, sep = ";", dec = ",", header = T, 
+                    stringsAsFactors = F)
+pnud_csv <- dt_pnud_csv[,c(1:10)]
+summary(pnud_csv)
+```
+
+
+####->XLSX:
+```{r}
+arq <- 'C:/Users/felipe/Desktop/R Programming/pnud_win.xlsx'
+dt_pnud_xlsx <- read_excel(arq, col_names = TRUE, na = "")
+pnud_xlsx <- dt_pnud_xlsx[,c(1:10)]
+summary(pnud_xlsx)
+```
+
+
+####->TXT:
+```{r}
+arq <- 'C:/Users/felipe/Desktop/R Programming/pnud_win.txt'
+dt_pnud_txt <- read.table(file = arq, sep = " ", dec = ".", header = T, 
+                           stringsAsFactors = F)
+pnud_txt <- dt_pnud_txt[,c(1:10)]
+summary(pnud_txt)
+```
+
+
+####->RDA:
+```{r}
+arq <- 'C:/Users/felipe/Desktop/R Programming/pnud.rda' 
+dt_pnud_rda <- load(arq)
+pnud_rda <- d[,c(1:10)]
+summary(pnud_rda)
+```
+
+
+####->RDS:
+```{r}
+arq <- 'C:/Users/felipe/Desktop/R Programming/pnud.rds' 
+dt_pnud_rds <- readRDS(arq)
+pnud_rds <- dt_pnud_rds[,c(1:10)]
+summary(pnud_rds)
+```
+
+
+####->SQLITE:
+```{r}
+arq <- 'C:/Users/felipe/Desktop/R Programming/pnud.sqlite'
+dados_pnud <- src_sqlite(arq) %>% 
+  tbl("pnud")
+pnud_sqlite <- data.frame(dados_pnud)
+summary(pnud_sqlite[,c(1:10)])
+```
+
+
+##Parte 2:
+
+
+```{r include=FALSE, cache=FALSE}
+link_pnud <- 'https://www.dropbox.com/s/seqctcl46qeemgu/pnud_simplificado.rds?dl=1'
+tmp <- tempfile()
+httr::GET(link_pnud, httr::write_disk(tmp))
+pnud <- readRDS(tmp)
+file.remove(tmp)
+```
+
+
+####->Quais são os seis municípios com os maiores IDH municipais em 2010.
+```{r}
+pnud %>% select(ano, ufn, idhm) %>% 
+  filter(ano == 2010) %>% 
+  arrange(desc(idhm)) %>% 
+  head(6)
+```
+
+
+####->Qual é a unidade federativa com menor expectativa de vida média, ponderada pela população dos municípios em 2000.
+```{r}
+pnud %>% select(ano, espvida, ufn, pesotot) %>%  
+  filter(ano == 2010) %>% group_by(ufn) %>%
+  summarise(espvida_med = sum(espvida * pesotot)/sum(pesotot)) %>% 
+  arrange(espvida_med) %>% head(1)
+```
+
+
+####->Quais são os municípios outliers com relação ao índice de Gini em 1991 e em 2010 
+####->(Dica: utilize como critério para determinar outliers valores maiores que a média mais duas vezes o desvio padrão).
+```{r}
+pnud %>% select(ano, gini, ufn) %>%
+  filter(ano == 2010 | ano == 1991) %>% filter(gini > (mean(gini) + (2 * sd(gini))))
+pnud %>% select(ano, ufn, rdpc, espvida) %>% arrange(desc(rdpc)) %>% head(10)
+```
+####quanto maior a renda per capita, maior a expectativa de vida!
+
+
+####-> No nordeste o aumento de distribuição de renda foi maior do que no sudeste?
+```{r}
+se <- c('Espírito Santo', 'Minhas Gerais', 'Rio de Janeiro', 'São Paulo')
+ne <- c('Alagoas', 'Bahia', 'Ceará', 'Maranhão', 'Paraíba', 'Pernambuco', 'Piauí', 'Rio Grande do Norte', 'Sergipe')
+n <- c('Acre', 'Amapá', 'Amazonas', 'Pará', 'Rondônia', 'Roraina', 'Tocantins')
+s <- c('Paraná', 'Santa Catarina', 'Rio Grande do Sul')
+co <- c('Distrito Federal', 'Goiás', 'Mato Grosso', 'Mato Grosso do Sul')
+
+val1 <- 
+pnud %>% filter(ufn %in% se) %>% group_by(ano) %>% summarise(x = mean(rdpc)) %>% summarise(media = mean(x))
+val2 <- 
+pnud %>% filter(ufn %in% ne) %>% group_by(ano) %>% summarise(x = mean(rdpc)) %>% summarise(media = mean(x))
+
+if (val1 > val2){
+  print('A renda do Sudeste aumentou mais que o Nordeste')
+}else
+{
+  print('A renda do Sudeste não aumentou mais que o Nordeste')
+}
+```
+
+
+
+####Associação entre Escolariedade, renda per capita e espectativa de vida.
+```{r}
+pnud %>% select(ano, ufn, i_escolaridade, rdpc, espvida) %>% group_by(ufn) %>% summarise(escolariedade_med = mean(i_escolaridade), renda_perc_med = mean(rdpc), espec_vida_med = mean(espvida)) %>% arrange(desc(escolariedade_med))
+```
+
+
+
+####Valores anteriores no gráfico (3 primeiras cidades)
+```{r}
+cidades <- c('Distrito Federal', 'Rio de Janeiro', 'São Paulo')
+
+valores <- 
+pnud %>% select(ano, ufn, i_escolaridade, rdpc, espvida) %>% 
+  mutate(i_escolaridade = ((i_escolaridade - min(i_escolaridade))/(max(i_escolaridade) - min(i_escolaridade))),
+         rdpc = ((rdpc - min(rdpc))/(max(rdpc) - min(rdpc))),
+         espvida = ((espvida - min(espvida))/(max(espvida) - min(espvida)))
+         ) %>%
+  gather(valores = c(i_escolaridade, rdpc, espvida)) %>%
+  filter(ufn %in% cidades) %>% group_by(key, ano, ufn) %>%
+  summarise(valor = mean(value)) 
+
+ggplot(valores, aes(ano, valor, color = key)) + geom_line() +
+  facet_wrap(~ufn) +
+  scale_color_manual("Índice", values = c("dark grey", "sky blue", "red"),
+                     labels = c("Espectativa de vida", "Escolariedade", "Renda per capita")
+                     ) +
+  labs(x = "Valores", y = "Ano")
+
+```

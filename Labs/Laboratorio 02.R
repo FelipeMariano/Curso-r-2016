@@ -31,9 +31,9 @@ summary(pnud_txt)
 
 ##RDA:
 arq <- 'C:/Users/felipe/Desktop/R Programming/pnud.rda' 
-dt_pnud_rda <- load(arq, .GlobalEnv)
-pnud_rda <- dt_pnud_rda[,c(1:10)]
-pnud_rda
+dt_pnud_rda <- load(arq)
+pnud_rda <- d[,c(1:10)]
+summary(pnud_rda)
 
 ##RDS:
 arq <- 'C:/Users/felipe/Desktop/R Programming/pnud.rds' 
