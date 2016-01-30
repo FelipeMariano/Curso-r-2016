@@ -80,6 +80,23 @@ summary(pnud_sqlite[,c(1:10)])
 ```
 
 
+####->HTML:
+```{r}
+arq <- 'C:/Users/felipe/Desktop/R Programming/pnud.html'
+tbs <- data.frame(readHTMLTable(arq))
+summary(tbs[,c(1:10)])
+```
+
+
+####->JSON:
+```{r}
+arq <- 'C:/Users/felipe/Desktop/R Programming/pnud.json'
+dt_json <- GET(arq)
+```
+
+
+
+
 ##Parte 2:
 
 

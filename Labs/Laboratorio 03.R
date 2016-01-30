@@ -32,7 +32,9 @@ flights <- flights %>% tbl_df
 
 ######MUTATE:
 #1------
- flights %>% select(flight, dep_delay, arr_delay, distance, air_time) %>% mutate(ganho_de_tempo = (dep_delay - arr_delay), velocidade = (distance/air_time * 60))
+ flights %>% 
+  select(flight, dep_delay, arr_delay, distance, air_time) %>% 
+  mutate(ganho_de_tempo = (dep_delay - arr_delay), velocidade = (distance/air_time * 60))
 
 #2------
   flights %>% select(flight, hour, minute, air_time) %>% mutate(hour2 = hour + (air_time%/%60), minute2 = air_time %% 60)
