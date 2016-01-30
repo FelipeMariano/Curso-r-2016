@@ -101,7 +101,7 @@ ggplot(data = diamonds %>% sample_n(1000), aes(y = price, x = carat, color = cut
   facet_wrap(~cut)
 
 
-####Gráfico de barrar: Quantidade de veículos por classe
+####Gráfico de barra: Quantidade de veículos por classe
 diamonds %>%
   group_by(cut) %>%
   summarise(n = n()) %>%

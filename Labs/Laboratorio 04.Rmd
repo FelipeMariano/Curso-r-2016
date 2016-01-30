@@ -3,7 +3,12 @@ title: "Laboratorio 04"
 output: html_document
 ---
 
-
+```{r include=FALSE, cache=FALSE}
+library(ggplot2)
+library(tidyr)
+library(dplyr)
+library(lubridate)
+```
 ##geom_point
 
 
@@ -16,7 +21,7 @@ output: html_document
 ####2. Faça um gráfico de dispersão do preço (price) pela variável quilates (carat). Utilize as funções xlab() e ylab() para trocar os labels dos eixos x e y, respectivamente.
 
 ```{r}
-library(ggplot2)
+
 
   graph <- 
 ggplot(diamonds) +
@@ -96,4 +101,94 @@ graphHist
 ```{r}
 graphHist +
   scale_color_manual(values = c("grey", "light blue"))
+```
+
+
+##geom_bar
+  
+
+####10. Quais são os aspectos estéticos (aesthetics) exigidos (obrigatórios) da função geom_bar()?
+#####Resposta: 
+            A variável/aspecto estético X.
+
+####11. Faça um gráfico de barras do número de diamantes em cada categoria da variável cor (color).
+```{r}
+graph <- 
+  ggplot(diamonds) +
+  geom_bar(aes(x = color)) +
+  ylab("Quantidade") +
+  xlab("Cor")
+graph
+```
+
+
+#BD ECONOMICS:
+
+
+####12. Faça um gráfico de dispersão do número de desempregados (eixo x) pelo tempo médio de desemprego (eixo y). Não se esqueça de alterar o label dos eixos.
+```{r}
+graph <- ggplot(data = economics, aes(x = unemploy, y = uempmed)) + 
+  geom_point() + 
+  xlab("Desempregados") + ylab("Tempo Médio de desemprego")
+
+graph
+```
+
+
+####13. Faça o mesmo gráfico do exercício anterior, no entanto, os pontos devem ter cores diferentes para cada ano, seguindo uma escala contínua.
+```{r}
+graph + 
+  geom_point(aes(color = year(date)))
+```
+
+
+####14. Faça um gráfico de linha do número de desempregados (eixo y) e a data (eixo x).
+```{r}
+graph <- ggplot(data = economics, aes(x = date, y = unemploy)) +
+  geom_line() +
+  xlab("Data") + ylab("Desempregados")
+```
+
+
+####15. Repita o gráfico anterior, no entanto desta vez a periodicidade deve ser anual e o valor apresentado no eixo y deve ser o número médio de desempregados.
+```{r}
+dt_economics <- 
+  economics %>% select(date, unemploy) %>%
+  group_by(ano = year(date)) %>% summarise(desemp = mean(unemploy))
+
+graph <- ggplot(data = dt_economics, aes(x = ano, y = desemp)) +
+  geom_line() +
+  xlab("Data") + ylab("Desempregados")
+
+graph
+```
+
+
+####16.Tente reproduzir o seguinte gráfico:
+```{r}
+dt_economics <- 
+  economics %>% select(date, unemploy) %>%
+  group_by(ano = year(date)) %>% summarise(desemp = median(unemploy), lim_inf = quantile(unemploy, probs = c(0.01), na.rm = TRUE), lim_sup = quantile(unemploy, probs = c(0.99), na.rm = TRUE))
+
+graph <- ggplot(data = dt_economics, aes(x = ano, y = desemp)) + 
+  geom_ribbon(aes(ymin = lim_inf, ymax = lim_sup), fill = "grey50") + 
+  geom_line()
+
+graph
+```
+
+
+####17. Afim de comparar a evolução no tempo dos índices pce, psaver e taxa de desemprego (unemploy/pop), tente refazer o seguinte gráfico.
+```{r}
+dt_economics <- 
+  economics %>%
+  mutate(txa_desemprego = (unemploy/pop)) %>% select(date, pce, psavert, txa_desemprego) %>% filter(pce < 9000)
+
+dt_economics <- 
+dt_economics %>%  gather(tipo, valor, -date)
+
+graph <-  
+  ggplot(data = dt_economics, aes(x = date, y = valor)) +
+  geom_line() + facet_grid(tipo ~ ., scales = "free_y")
+graph
 ```
