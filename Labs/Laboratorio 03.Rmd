@@ -102,3 +102,5 @@ flights %>% filter(dep_delay > 0) %>%
   filter(atraso_med > 60) %>% 
   arrange(desc(atraso_med)) %>% head(10)
 ```
+
+

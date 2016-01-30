@@ -21,6 +21,7 @@ library(xml2)
 library(rvest)
 library(ggplot2)
 library(tidyr)
+library(jsonlite)
 ```
 
 ####->CSV:
@@ -82,16 +83,27 @@ summary(pnud_sqlite[,c(1:10)])
 
 ####->HTML:
 ```{r}
-arq <- 'C:/Users/felipe/Desktop/R Programming/pnud.html'
-tbs <- data.frame(readHTMLTable(arq))
-summary(tbs[,c(1:10)])
+arq <- "file://C:/Users/felipe/Desktop/R Programming/pnud.html"
+dados_pnud <- arq %>%
+  GET() %>%
+  content('text') %>%
+  read_html() %>%
+  html_node('table')
+
+pnud_html <- 
+  dados_pnud %>% 
+  html_table(header = TRUE) %>%
+  data.frame()
+summary(pnud_html[,c(1:10)])
 ```
 
 
 ####->JSON:
 ```{r}
-arq <- 'C:/Users/felipe/Desktop/R Programming/pnud.json'
-dt_json <- GET(arq)
+arq <- "C:/Users/felipe/Desktop/R Programming/pnud.json"
+
+pnud_json <- data.frame(fromJSON(arq))
+summary(pnud_json[,c(1:10)])
 ```
 
 
@@ -101,11 +113,14 @@ dt_json <- GET(arq)
 
 
 ```{r include=FALSE, cache=FALSE}
-link_pnud <- 'https://www.dropbox.com/s/seqctcl46qeemgu/pnud_simplificado.rds?dl=1'
-tmp <- tempfile()
-httr::GET(link_pnud, httr::write_disk(tmp))
-pnud <- readRDS(tmp)
-file.remove(tmp)
+#link_pnud <- 'https://www.dropbox.com/s/seqctcl46qeemgu/pnud_simplificado.rds?dl=1'
+#tmp <- tempfile()
+#httr::GET(link_pnud, httr::write_disk(tmp))
+#pnud <- readRDS(tmp)
+#file.remove(tmp)
+
+link_pnud <- 'C:/Users/felipe/Desktop/R Programming/pnud_simplificado.rds'
+pnud <- readRDS(link_pnud)
 ```
 
 
@@ -193,13 +208,11 @@ ggplot(valores, aes(ano, valor, color = key)) + geom_line() +
 
 ####Renda per capita de São Paulo:
 ```{r results='hide', message=FALSE, warning=FALSE}
-
 valores <- 
-pnud %>% select(ano, ufn, rdpc, municipio) %>% 
-  filter(ufn %in% 'São Paulo') %>% group_by(ano, municipio) %>%
-  summarise(valor = mean(rdpc)) %>% arrange(desc(valor))
+pnud %>% select(ano, ufn, rdpc) %>% 
+  filter(ufn %in% 'São Paulo')
 
 ggplot(valores) + 
-  geom_histogram(aes(x = valor, y = ..density..), color = 'light grey', fill = 'dark grey')
+  geom_histogram(aes(x = rdpc, y = ..density..), color = 'light grey', fill = 'dark grey') + ylab("Densidade")
 
 ```
