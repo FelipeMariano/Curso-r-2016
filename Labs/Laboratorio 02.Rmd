@@ -126,8 +126,8 @@ pnud <- readRDS(link_pnud)
 
 ####->Quais são os seis municípios com os maiores IDH municipais em 2010.
 ```{r}
-pnud %>% select(ano, ufn, idhm) %>% 
-  filter(ano == 2010) %>% 
+pnud %>% select(ano, municipio, ufn, idhm) %>% 
+  filter(ano == 2010) %>%
   arrange(desc(idhm)) %>% 
   head(6)
 ```
@@ -145,9 +145,14 @@ pnud %>% select(ano, espvida, ufn, pesotot) %>%
 ####->Quais são os municípios outliers com relação ao índice de Gini em 1991 e em 2010 
 ####->(Dica: utilize como critério para determinar outliers valores maiores que a média mais duas vezes o desvio padrão).
 ```{r}
-pnud %>% select(ano, gini, ufn) %>%
+pnud %>% select(ano, municipio, gini, ufn) %>%
   filter(ano == 2010 | ano == 1991) %>% filter(gini > (mean(gini) + (2 * sd(gini))))
-pnud %>% select(ano, ufn, rdpc, espvida) %>% arrange(desc(rdpc)) %>% head(10)
+```
+
+
+####->Categorize a renda per capita e associe com a expectativa de vida.
+```{r}
+pnud %>% select(ano, municipio, ufn, rdpc, espvida) %>% arrange(desc(rdpc)) %>% head(10)
 ```
 ####quanto maior a renda per capita, maior a expectativa de vida!
 
@@ -174,7 +179,7 @@ if (val1 > val2){
 
 
 
-####Associação entre Escolariedade, renda per capita e espectativa de vida.
+####Associação entre escolariedade, renda per capita e espectativa de vida.
 ```{r}
 pnud %>% select(ano, ufn, idhm, rdpc, espvida) %>% group_by(ufn) %>% summarise(idhm_med = mean(idhm), renda_perc_med = mean(rdpc), espec_vida_med = mean(espvida)) %>% arrange(desc(idhm_med))
 ```
@@ -206,10 +211,10 @@ ggplot(valores, aes(ano, valor, color = key)) + geom_line() +
 
 
 
-####Renda per capita de São Paulo:
+####Renda per capita dos municipios de São Paulo:
 ```{r results='hide', message=FALSE, warning=FALSE}
 valores <- 
-pnud %>% select(ano, ufn, rdpc) %>% 
+pnud %>% select(ano, ufn, rdpc, municipio) %>% 
   filter(ufn %in% 'São Paulo')
 
 ggplot(valores) + 

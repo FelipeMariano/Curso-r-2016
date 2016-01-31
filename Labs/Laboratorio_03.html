@@ -223,7 +223,7 @@ img {
 ##   media_dist
 ##        (dbl)
 ## 1   1039.913</code></pre>
-<pre class="r"><code>flights %&gt;% group_by(month) %&gt;% summarise(media = mean(distance))</code></pre>
+<pre class="r"><code>  flights %&gt;% group_by(month) %&gt;% summarise(media = mean(distance))</code></pre>
 <pre><code>## Source: local data frame [12 x 2]
 ## 
 ##    month    media
@@ -242,24 +242,23 @@ img {
 ## 12    12 1064.656</code></pre>
 <pre class="r"><code>flights %&gt;% 
   group_by(month) %&gt;% 
-  summarise(media = mean(air_time, na.rm = TRUE), mediana = median(air_time, na.rm = TRUE), quart1 = quantile(air_time, probs = c(0.25), na.rm = TRUE), quart3 = quantile(air_time, probs = c(0.25), na.rm = TRUE))</code></pre>
+  summarise(media = mean(air_time, na.rm = TRUE), mediana = median(air_time, na.rm = TRUE), quart1 = quantile(air_time, probs = c(0.25), na.rm = TRUE), quart3 = quantile(air_time, probs = c(0.75), na.rm = TRUE))</code></pre>
 <pre><code>## Source: local data frame [12 x 5]
 ## 
 ##    month    media mediana quart1 quart3
 ##    (int)    (dbl)   (dbl)  (dbl)  (dbl)
-## 1      1 154.1874     137     84     84
-## 2      2 151.3464     136     83     83
-## 3      3 149.0770     132     82     82
-## 4      4 153.1011     133     84     84
-## 5      5 145.7275     122     77     77
-## 6      6 150.3252     127     81     81
-## 7      7 146.7283     124     79     79
-## 8      8 148.1604     124     81     81
-## 9      9 143.4712     117     77     77
-## 10    10 148.8861     124     81     81
-## 11    11 155.4686     133     87     87
-## 12    12 162.5914     142     93     93</code></pre>
-<pre class="r"><code>  #ARRUMAR</code></pre>
+## 1      1 154.1874     137     84    194
+## 2      2 151.3464     136     83    192
+## 3      3 149.0770     132     82    190
+## 4      4 153.1011     133     84    194
+## 5      5 145.7275     122     77    188
+## 6      6 150.3252     127     81    192
+## 7      7 146.7283     124     79    190
+## 8      8 148.1604     124     81    189
+## 9      9 143.4712     117     77    182
+## 10    10 148.8861     124     81    191
+## 11    11 155.4686     133     87    196
+## 12    12 162.5914     142     93    202</code></pre>
 </div>
 <div id="arrange" class="section level3">
 <h3>ARRANGE:</h3>
