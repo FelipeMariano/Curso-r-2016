@@ -91,16 +91,18 @@ graphHist +
 ####8. Faça boxplots da variável preço coloridos de acordo com a variável corte (cut).
 ```{r}
 graphHist <- 
-ggplot(data = diamonds) +
-  geom_boxplot(aes(y = price, x = color, fill = cut))
+  ggplot(diamonds, aes(x = color, y = price, color = cut)) +
+  geom_boxplot()
 graphHist
 ```
 
 
 ####9. Substitua as cores padrões e remova a legenda do gráfico anterior. (Dica: use a função scale_color_manual)
 ```{r}
-graphHist +
-  scale_color_manual(values = c("grey", "light blue"))
+graph2 <- 
+graphHist + 
+  scale_color_manual(values=c("#999999", "#E69F00", "#56B4E9", "dark green", "purple"))
+graph2
 ```
 
 
