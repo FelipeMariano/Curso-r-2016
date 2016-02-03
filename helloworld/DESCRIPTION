@@ -1,0 +1,12 @@
+Package: helloworld
+Type: Package
+Title: What the Package Does (Title Case)
+Version: 0.1.0
+Authors@R: person("Felipe", "Mariano", email = "felipemarianodasilva@gmail.com", role = c("aut", "cre"))
+Description: More about what it does (maybe more than one line)
+License: MIT
+LazyData: TRUE
+Imports:
+    dplyr
+RoxygenNote: 5.0.1
+Suggests: testthat
