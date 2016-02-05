@@ -12,23 +12,21 @@ library(ggplot2)
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
 
-  output$distPlot <- renderPlot({
-
-    # generate bins based on input$bins from ui.R
-    x    <- faithful[, 2]
-    bins <- seq(min(x), max(x), length.out = input$bins + 1)
-
-    # draw the histogram with the specified number of bins
-    hist(x, breaks = bins, col = 'darkgray', border = 'white')
-
+  dados <- reactive({
+    n <- input$n
+    m <- mtcars[1:input$n]
+    isolate({
+      m[1:input$n2, ]
+    })
   })
 
+
   output$id_graf <- renderPlot({
-    pairs(mtcars[1:input$n])
+    pairs(dados())
   })
 
   output$id_tab <- renderTable({
-    cor(mtcars[1:input$n])
+    cor(dados())
   })
 
 })

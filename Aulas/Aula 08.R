@@ -11,3 +11,6 @@ shiny::runGitHub('abjur/vistemplate',
 
 
 ### LISTA DE WIDGETS = http://shiny.rstudio.com/gallery/widget-gallery.html
+#R ftw :
+#http://shiny.rstudio.com/articles/building-inputs.html
+#http://shiny.rstudio.com/articles/building-outputs.html

@@ -24,7 +24,8 @@ shinyUI(fluidPage(
                                                   "vl3" = "valor 3"
                                                   )),
       textInput(inputId = "txtTexto", "Caption:", "Data Summary"),
-      numericInput('n', label = 'N', value = 3)
+      numericInput('n', label = 'N', value = 3),
+      numericInput('n2', label = 'N2', value = 3)
     ),
     # Show a plot of the generated distribution
     mainPanel(
