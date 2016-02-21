@@ -1,0 +1,186 @@
+---
+title: "Laboratorio 05"
+author: "Curso R de verão 2016 - Felipe Mariano"
+date: "02 de fevereiro de 2016"
+output: html_document
+---
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r include=FALSE, cache=FALSE}
+library(ggplot2)
+library(magrittr)
+library(tidyr)
+library(dplyr)
+library(jpeg)
+library(tree)
+```
+
+You can also embed plots, for example:
+
+```{r}
+# a) carrega uma imagem jpeg no R 
+img <- readJPEG("C:/Users/felipe/Documents/Curso-r-2016/Labs/_source/images/purple_wave.jpg")
+
+# b) transforma o array da imagem em data.frame com infos de posicao (x,y) e cor (r,g,b)
+# dimensões da imagem
+img_dim <- dim(img)
+
+# RGB para data.frame
+img_df <- data.frame(
+  x = rep(1:img_dim[2], each = img_dim[1]),
+  y = rep(img_dim[1]:1, img_dim[2]),
+  r = as.vector(img[,,1]),
+  g = as.vector(img[,,2]),
+  b = as.vector(img[,,3])
+) %>%
+  mutate(cor = rgb(r, g, b),
+         id = 1:n())
+
+# para reprodução
+set.seed(1) 
+
+# Parte 1) x, y, r, g
+img_df_parte1 <- img_df %>% 
+  sample_frac(3/5) %>% # separando 3/5 do banco
+  mutate(b_backup = b, # backup do azul original
+         b = 0, # retirando o azul da imagem
+         cor = rgb(r, g, b)) # cor da imagem sem o azul
+
+# Parte 2) x, y, r, g, b
+img_df_parte2 <- img_df %>% filter(!id%in%img_df_parte1$id) # filtra as linhas que estão na Parte 1
+  
+ajuste <- lm(b ~ g + r, dat = img_df_parte2)
+
+# Imagem sem o azul
+ggplot(data = img_df_parte1, aes(x = x, y = y)) + 
+  geom_point(colour = img_df_parte1$cor) +
+  labs(x = "x", y = "y", title = "Imagem sem B (azul)") +
+  coord_fixed(ratio = 1) +
+  theme_bw()
+
+# Apenas o azul da imagem
+ggplot(data = img_df_parte2, aes(x = x, y = y)) + 
+  geom_point(colour = img_df_parte2$cor) +
+  labs(x = "x", y = "y", title = "Imagem sem B (azul)") +
+  coord_fixed(ratio = 1) +
+  theme_bw()
+```
+
+####Exercício 1: Descritiva
+```{r}
+
+# uma amostra de 500 pontos para a análise descritiva (usar o banco inteiro é desnecessário e demorado)
+img_df_amostra <- img_df %>% 
+  sample_n(500,replace = FALSE)
+
+img_df_amostra %>% select(x,y,r:b) %>%
+  cor %>% round(2)
+
+pairs(img_df_amostra %>% select(x,y,r:b))
+
+```
+
+####Exercício 2: Modelo de Regressão Linear
+```{r}
+  ajuste <- lm(b ~ r - g, data = img_df_amostra)
+  coefct <- coef(ajuste)   
+
+   ggplot(data = img_df_amostra) +
+    geom_point(aes(r,b), color = 'dark grey') +
+    geom_abline(intercept = coefct[1], slope = coefct[2])
+```
+
+####Exercício 3: Modelo de Árvore de Decisão
+```{r}
+  ajuste <- tree(b ~ r - g, data = img_df_amostra)
+  
+  #plot(ajuste)
+  #text(ajuste, pretty = 0)
+  
+  set.seed(123)
+  cv_tree <- cv.tree(ajuste)
+  #plot(cv_tree)
+  
+  best_tree <- prune.tree(ajuste, best = 4)
+  #plot(best_tree)
+  #text(best_tree, pretty = 0)
+  
+  table(img_df_amostra$b,predict(best_tree) > 0.5)
+```
+
+####Exercício 4: Comparação
+```{r}
+  ajuste <- lm(b ~ r - g, data = img_df_amostra)
+  coefct <- coef(ajuste)   
+
+   ggplot(data = img_df_amostra) +
+    geom_point(aes(r,b), color = 'dark grey') +
+    geom_abline(intercept = coefct[1], slope = coefct[2])
+```
+
+
+```{r}
+# a) carrega uma imagem jpeg no R 
+img <- readJPEG("C:/Users/felipe/Documents/Curso-r-2016/Labs/_source/images/xadrez_colorido.jpg")
+
+# b) transforma o array da imagem em data.frame com infos de posicao (x,y) e cor (r,g,b)
+# dimensões da imagem
+img_dim <- dim(img)
+
+# RGB para data.frame
+img_df <- data.frame(
+  x = rep(1:img_dim[2], each = img_dim[1]),
+  y = rep(img_dim[1]:1, img_dim[2]),
+  r = as.vector(img[,,1]),
+  g = as.vector(img[,,2]),
+  b = as.vector(img[,,3])
+) %>%
+  mutate(cor = rgb(r, g, b),
+         id = 1:n())
+
+# para reprodução
+set.seed(1) 
+
+# Parte 1) x, y, r, g
+img_df_parte1 <- img_df %>% 
+  sample_frac(3/5) %>% # separando 3/5 do banco
+  mutate(b_backup = b, # backup do azul original
+         b = 0, # retirando o azul da imagem
+         cor = rgb(r, g, b)) # cor da imagem sem o azul
+
+# Parte 2) x, y, r, g, b
+img_df_parte2 <- img_df %>% filter(!id%in%img_df_parte1$id) # filtra as linhas que estão na Parte 1
+  
+ajuste <- lm(b ~ g + r, dat = img_df_parte2)
+
+# Imagem sem o azul
+ggplot(data = img_df_parte1, aes(x = x, y = y)) + 
+  geom_point(colour = img_df_parte1$cor) +
+  labs(x = "x", y = "y", title = "Imagem sem B (azul)") +
+  coord_fixed(ratio = 1) +
+  theme_bw()
+
+# Apenas o azul da imagem
+ggplot(data = img_df_parte2, aes(x = x, y = y)) + 
+  geom_point(colour = img_df_parte2$cor) +
+  labs(x = "x", y = "y", title = "Imagem sem B (azul)") +
+  coord_fixed(ratio = 1) +
+  theme_bw()
+```
+
+####Exercício 1 [XADREZ]: Descritiva
+```{r}
+
+# uma amostra de 500 pontos para a análise descritiva (usar o banco inteiro é desnecessário e demorado)
+img_df_amostra <- img_df %>% 
+  sample_n(500,replace = FALSE)
+
+img_df_amostra %>% select(x,y,r:b) %>%
+  cor %>% round(2)
+
+pairs(img_df_amostra %>% select(x,y,r:b))
+
+```
